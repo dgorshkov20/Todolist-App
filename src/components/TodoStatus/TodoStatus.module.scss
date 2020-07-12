@@ -1,0 +1,46 @@
+.TodoStatus {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    height: 30px;
+    width: 100%;
+
+    background: #fff;
+    border: 1px solid rgb(148, 148, 148);
+    box-sizing: border-box;
+    font-size: 13px;
+    color: #505050;
+}
+
+.filterValue {
+    margin: 0 5px;
+    padding: 2px 4px;
+
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 2px;
+
+    transition:  .3s;
+
+    &:hover {
+        border: 1px solid rgb(236, 162, 92);
+    }
+}
+
+.active {
+    border: 1px solid rgb(245, 138, 38);
+}
+
+.clearCompleted {
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.clearBlock {
+    width: 95px;
+    height: 15px;
+}

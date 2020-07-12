@@ -1,0 +1,22 @@
+.Todolist {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 150px;
+    font-family: sans-serif;
+    
+    background-color: rgb(235, 235, 235);
+
+}
+
+.title {
+    color: rgb(253, 163, 45);
+    font-weight: lighter;
+    font-size: 60px;
+    margin: 10px 0;
+}
+
+.wrapper {
+    width: 450px;
+}

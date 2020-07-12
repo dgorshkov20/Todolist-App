@@ -1,0 +1,41 @@
+.TaskItem {
+    display: flex;
+    align-items: center;
+    height: 45px;
+    padding-left: 40px;
+
+    color: rgb(37, 37, 37);
+    border: 1px solid rgb(148, 148, 148);
+    list-style: none;
+    background-color: #fff;
+    box-sizing: border-box;
+    font-size: 20px;
+
+    position: relative;
+
+    transition: .4s;
+
+    &:hover .clear {
+        opacity: 1;
+    }
+}
+
+.clear {
+    color: rgba(151, 28, 28, .5);
+    opacity: 0;
+    
+    position: absolute;
+    right: 15px;
+
+    cursor: pointer;
+    transition: .3s;
+
+    &:hover {
+        color: rgb(151, 28, 28);
+    }
+}
+
+.line {
+    text-decoration: line-through;
+    color: #959595;
+}
