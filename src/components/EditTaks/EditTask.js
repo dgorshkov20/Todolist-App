@@ -10,6 +10,7 @@ const EditTask = props => {
                 type="text" 
                 value={props.task.text}
                 onChange={(event) => props.editValueHandler(props.task, event.target.value)}
+                onBlur={() => props.editTask(props.task)}
                 autoFocus
             />
         </React.Fragment>

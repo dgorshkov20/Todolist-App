@@ -1,12 +1,38 @@
 .Input {
     width: 100%;
     height: 45px;
-    padding-left: 40px;
+    padding: 0 40px;
 
     font-size: 18px;
     box-sizing: border-box;
     outline: none;
     color: rgb(27, 27, 27);
     border-radius: none;
+
+    position: relative;
+}
+
+.InputBlock {
+    position: relative;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+
+    fill: rgb(128, 128, 128);
+
+    position: absolute;
+    top: 7px;
+    right: 10px;
+
+    cursor: pointer;
+    z-index: 10;
+
+    transition: .5s;
+
+    &:hover {
+        fill: rgb(43, 133, 235);
+    }
 }
 

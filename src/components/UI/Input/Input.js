@@ -4,7 +4,7 @@ import classes from './Input.module.scss'
 const Input = props => {
 
     return (
-        <div>
+        <div  className={classes.InputBlock} >
             <input 
                 className={classes.Input} 
                 type="text" 

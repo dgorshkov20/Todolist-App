@@ -33,6 +33,7 @@ const TaskItem = props => {
                 <EditTask 
                     task={props.task}
                     editValueHandler={props.editValueHandler}
+                    editTask={props.editTaskHandler}
                 />
                 : null
             }

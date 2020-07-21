@@ -9,10 +9,10 @@ class Todolist extends React.Component {
 
     state = {
         todolists: [],
-        filter: ''
+        filter: 'all'
     }
 
-    onAddHandler = (event) => {
+    onAddHandler = event => {
         if (event.key === 'Enter') {
             if (event.target.value !== '' && event.target.value.length < 35) {
 
@@ -26,10 +26,7 @@ class Todolist extends React.Component {
                 }
     
                 tasks.push(task)
-    
                 event.target.value = ''
-
-                
     
                 this.setState({
                     todolists: tasks
@@ -65,7 +62,6 @@ class Todolist extends React.Component {
     }
 
     changedFilterHandler = e => {
-        
         this.setState({
             filter: e.target.getAttribute('data-value')
         })
@@ -76,9 +72,10 @@ class Todolist extends React.Component {
         const edit = tasks.filter(e => e === task)
         edit[0].edit = !task.edit
 
-        this.setState({
-            todolists:  tasks
-        })
+            this.setState({
+                todolists:  tasks
+            }) 
+
     }
 
     editValueHandler = (task, value) => {
@@ -86,14 +83,13 @@ class Todolist extends React.Component {
         const edit = tasks.filter(e => e === task)
         edit[0].text = value
 
-
         this.setState({
             todolists:  tasks
         })
     }
 
     hideInputEditHandler = (task, event) => {
-        console.log(event.keyCode)
+
         if (event.key === 'Enter'){
             const tasks = this.state.todolists.concat() 
             const edit = tasks.filter(e => e === task)
@@ -106,7 +102,7 @@ class Todolist extends React.Component {
         
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const getTodolist = localStorage.getItem('state')
 
         this.setState({
@@ -115,6 +111,14 @@ class Todolist extends React.Component {
         })
     } 
 
+    componentDidUpdate(prevProps) {
+        // Популярный пример (не забудьте сравнить пропсы):
+        if (this.state !== prevProps) {
+            localStorage.setItem('state', JSON.stringify(this.state.todolists))
+            localStorage.setItem('filter', this.state.filter)
+        }
+    }
+
     render() {
 
         let filterTasks = [];
@@ -122,9 +126,6 @@ class Todolist extends React.Component {
         if (this.state.filter === 'all') filterTasks = this.state.todolists
         if (this.state.filter === 'active') filterTasks = this.state.todolists.filter(t => t.completed === false)
         if (this.state.filter === 'completed') filterTasks = this.state.todolists.filter(t => t.completed === true)
-
-        localStorage.setItem('state', JSON.stringify(this.state.todolists))
-        localStorage.setItem('filter', this.state.filter)
 
         return (
             <div className={classes.Todolist} >
@@ -137,10 +138,10 @@ class Todolist extends React.Component {
 
                     <TaskLists
                         lists={filterTasks}
-                        editValueHandler={this.editValueHandler}
                         onDelete={this.onDeleteHandler}
-                        hideInputEditHandler={this.hideInputEditHandler}
                         toggleComplete={this.onToggleComplete}
+                        editValueHandler={this.editValueHandler}
+                        hideInputEditHandler={this.hideInputEditHandler}
                         editTaskHandler={this.editTaskHandler}
                     />
 
@@ -154,6 +155,8 @@ class Todolist extends React.Component {
                           />
                         : null
                     }
+
+
                 </div>
 
             </div>
