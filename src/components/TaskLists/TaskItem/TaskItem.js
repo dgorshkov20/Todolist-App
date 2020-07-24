@@ -5,9 +5,8 @@ import classes from './TaskItem.module.scss'
 
 const TaskItem = props => {
 
-    let cls = [];
-
-    cls.push(classes.TaskItem)
+    let cls = [classes.TaskItem];
+    
     if (props.task.completed) {
         cls.push(classes.line)
     }

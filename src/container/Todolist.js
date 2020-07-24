@@ -42,10 +42,11 @@ class Todolist extends React.Component {
         })
     }
 
-    onToggleComplete = task => {
+    onToggleComplete = (task) => {
         const tasks = this.state.todolists.concat() 
-        const toggle = tasks.filter(t => t === task)
-        toggle[0].completed = !task.completed
+        // const toggle = tasks.filter(t => t === task)
+        // toggle[0].completed = !task.completed
+        task.completed = !task.completed
 
         this.setState({
             todolists:  tasks
@@ -69,9 +70,9 @@ class Todolist extends React.Component {
 
     editTaskHandler = task => {
         const tasks = this.state.todolists.concat() 
-        const edit = tasks.filter(e => e === task)
-        edit[0].edit = !task.edit
-
+        // const edit = tasks.filter(e => e === task)
+        // edit[0].edit = !task.edit
+        task.edit = !task.edit
             this.setState({
                 todolists:  tasks
             }) 
@@ -80,8 +81,9 @@ class Todolist extends React.Component {
 
     editValueHandler = (task, value) => {
         const tasks = this.state.todolists.concat() 
-        const edit = tasks.filter(e => e === task)
-        edit[0].text = value
+        // const edit = tasks.filter(e => e === task)
+        // edit[0].text = value
+        task.text = value
 
         this.setState({
             todolists:  tasks
@@ -90,10 +92,11 @@ class Todolist extends React.Component {
 
     hideInputEditHandler = (task, event) => {
 
-        if (event.key === 'Enter'){
+        if (event.key === 'Enter') {
             const tasks = this.state.todolists.concat() 
-            const edit = tasks.filter(e => e === task)
-            edit[0].edit = !task.edit
+            // const edit = tasks.filter(e => e === task)
+            // edit[0].edit = !task.edit
+            task.edit = !task.edit
 
             this.setState({
                 todolists:  tasks
@@ -134,6 +137,7 @@ class Todolist extends React.Component {
                 <div className={classes.wrapper}>
                     <Input
                         onAddTask={this.onAddHandler}
+                        taskLength={this.state.todolists.length}
                     />
 
                     <TaskLists

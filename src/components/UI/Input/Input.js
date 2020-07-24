@@ -2,15 +2,21 @@ import React from 'react'
 import classes from './Input.module.scss'
 
 const Input = props => {
+    
+    let cls = [classes.Input];
+    if (props.taskLength > 0) {
+        cls.push(classes.InputActive)
+    }
 
     return (
-        <div  className={classes.InputBlock} >
+        <div>
             <input 
-                className={classes.Input} 
+                className={cls.join(' ')} 
                 type="text" 
-                placeholder="What need to be done?" 
+                placeholder="Что нужно сделать?" 
+                maxLength="35"
                 onKeyDown={(event) => props.onAddTask(event)}
-            />
+            />  
         </div>
     )
 }

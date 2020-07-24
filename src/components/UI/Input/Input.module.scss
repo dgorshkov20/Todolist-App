@@ -7,32 +7,19 @@
     box-sizing: border-box;
     outline: none;
     color: rgb(27, 27, 27);
-    border-radius: none;
+    border-radius: 5px;
+    border: 1px solid rgb(148, 148, 148);
+    
 
     position: relative;
 }
 
-.InputBlock {
-    position: relative;
+.InputActive {
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
 }
 
-.icon {
-    width: 30px;
-    height: 30px;
 
-    fill: rgb(128, 128, 128);
 
-    position: absolute;
-    top: 7px;
-    right: 10px;
 
-    cursor: pointer;
-    z-index: 10;
-
-    transition: .5s;
-
-    &:hover {
-        fill: rgb(43, 133, 235);
-    }
-}
 
