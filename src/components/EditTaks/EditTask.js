@@ -9,8 +9,9 @@ const EditTask = props => {
                 className={classes.EditTask}  
                 type="text" 
                 value={props.task.text}
+                maxLength="35"
                 onChange={(event) => props.editValueHandler(props.task, event.target.value)}
-                onBlur={() => props.editTask(props.task)}
+                onBlur={(event) => props.editTask(props.task, event.target.value)}
                 autoFocus
             />
         </React.Fragment>

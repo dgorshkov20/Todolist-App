@@ -13,7 +13,7 @@ const TaskItem = props => {
 
     return (
         <li className={cls.join(' ')}
-            onDoubleClick={() => props.editTaskHandler(props.task)}
+            onDoubleClick={() => props.editTaskHandler(props.task, props.task.text)}
             onKeyPress={(event) => props.hideInputEditHandler(props.task, event)}
         >
             <Checkbox 

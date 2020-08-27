@@ -12,8 +12,8 @@ const TaskLists = props => {
                 task={list}
                 onDelete={props.onDelete}
                 toggleComplete={props.toggleComplete}
-                editTaskHandler={props.editTaskHandler}
                 editValueHandler={props.editValueHandler}
+                editTaskHandler={props.editTaskHandler}
                 hideInputEditHandler={props.hideInputEditHandler}
             />
         )
