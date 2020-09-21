@@ -1,0 +1,87 @@
+.Auth {
+    display: flex;
+    justify-content: center;
+    padding-top: 100px;
+    width: 100%;
+    height: 100vh;
+
+}
+
+.Auth > div {
+    height: 300px;
+    min-width: 400px;
+    padding: 30px 70px;
+
+    background-color: rgb(140, 138, 255);
+    text-align: center;
+    color: #fff;
+    border: 3px solid #fff;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0, .5);
+}
+
+.Auth > div > h1 {
+    margin: 10px;
+}
+
+.wrapper {
+    display: flex;
+}
+
+.disabled {
+    margin-top: 10px;
+    margin-right: 20px;
+    padding: 7px 20px;
+    color: rgb(75, 74, 74);
+
+    border-radius: 5px;
+    border-color: transparent; 
+    font-size: 16px;
+    outline: none;
+
+    cursor: not-allowed;
+}
+
+.buttonPri {
+    margin-top: 10px;
+    margin-right: 20px;
+    padding: 7px 20px;
+    color: #fff;
+
+    border-radius: 5px;
+    border-color: transparent; 
+    font-size: 16px;
+    outline: none;
+    background-color: rgb(77, 133, 238);
+
+    cursor: pointer;
+    transition: .3s;
+
+    &:hover {
+        transform: scale(1.05)
+    }
+}
+
+.buttonGreen {
+    margin-top: 10px;
+    margin-right: 20px;
+    padding: 7px 20px;
+    color: #fff;
+
+    border-radius: 5px;
+    border-color: transparent; 
+    font-size: 16px;
+    outline: none;
+    background-color: rgb(77, 238, 112);
+
+    cursor: pointer;
+    transition: .3s;
+
+    &:hover {
+        transform: scale(1.05)
+    }
+}
+
+.success {
+    color: rgb(77, 238, 112);
+}

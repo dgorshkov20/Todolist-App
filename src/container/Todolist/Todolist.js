@@ -1,10 +1,10 @@
 import React from 'react'
 import classes from './Todolist.module.scss'
 import axios from 'axios'
-import Input from '../components/UI/Input/Input'
-import TaskLists from '../components/TaskLists/TaskLists'
-import TodoStatus from '../components/TodoStatus/TodoStatus'
-import Loader from '../components/UI/Loader/Loader'
+import Input from '../../components/UI/Input/Input'
+import TaskLists from '../../components/TaskLists/TaskLists'
+import TodoStatus from '../../components/TodoStatus/TodoStatus'
+import Loader from '../../components/UI/Loader/Loader'
 
 
 class Todolist extends React.Component {
@@ -13,12 +13,17 @@ class Todolist extends React.Component {
         todolists: [],
         dataKey: [],
         filter: 'all',
-        loader: true
+        loader: true,
+        loaderSm: false
     }
 
     onAddHandler = async event => {
         if (event.key === 'Enter') {
             if (event.target.value !== '' && event.target.value.length < 35) {
+
+                this.setState({
+                    loaderSm: true
+                })
 
                 const tasks = this.state.todolists.concat() 
     
@@ -47,6 +52,11 @@ class Todolist extends React.Component {
     } 
 
     onDeleteHandler = async task => {
+
+        this.setState({
+            loaderSm: true
+        })
+
         try {
             const index = this.state.todolists.indexOf(task)
             await axios.delete(`https://todolist-app-fb466.firebaseio.com/task/${this.state.dataKey[index]}.json`) 
@@ -62,23 +72,32 @@ class Todolist extends React.Component {
 
     onToggleComplete = async task => {
 
+        this.setState({
+            loaderSm: true
+        })
+
         try {
             const tasks = this.state.todolists.concat() 
             task.completed = !task.completed
             
             const index = this.state.todolists.indexOf(task)
             await axios.patch(`https://todolist-app-fb466.firebaseio.com/task/${this.state.dataKey[index]}.json`, task) 
-
             this.setState({
-                todolists:  tasks
+                todolists: tasks
             })
 
         } catch(e) {
             console.error(e)
         }
+        console.log(this.state.loaderSm)
     }
 
     clearCompletedHandler = () => {
+
+        this.setState({
+            loaderSm: true
+        })
+
         const tasks = this.state.todolists.concat() 
         let indexes = []
 
@@ -111,6 +130,10 @@ class Todolist extends React.Component {
 
     editTaskHandler = async (task, value) => {
 
+        this.setState({
+            loaderSm: true
+        })
+
         const index = this.state.todolists.indexOf(task)
         if (value.length > 0) {
             const tasks = this.state.todolists.concat() 
@@ -142,6 +165,10 @@ class Todolist extends React.Component {
     }
 
     hideInputEditHandler = async (task, event) => {
+
+        this.setState({
+            loaderSm: true
+        })
 
         const index = this.state.todolists.indexOf(task)
         if (event.key === 'Enter') {
@@ -205,6 +232,12 @@ class Todolist extends React.Component {
 
     async componentDidUpdate(prevProps, prevState) {
         
+        if (prevState.todolists !== this.state.todolists) {
+            this.setState({
+                loaderSm: false
+            })
+        }
+
         if (prevState.todolists.length !== this.state.todolists.length) {
             try {
                 const response = await axios.get('https://todolist-app-fb466.firebaseio.com/task.json') 
@@ -219,6 +252,9 @@ class Todolist extends React.Component {
                 console.error(e)
             }
         }
+
+        
+        
     }
 
     render() {
@@ -231,6 +267,13 @@ class Todolist extends React.Component {
 
         return (
             <div className={classes.Todolist} >
+                {
+                    this.state.loaderSm 
+                    ?   <div className={classes.LoaderSm}>
+                            <Loader />
+                        </div>
+                    : null
+                }
                 <h1 className={classes.title}>Todos</h1>
 
                 <div className={classes.wrapper}>
@@ -250,8 +293,6 @@ class Todolist extends React.Component {
                         hideInputEditHandler={this.hideInputEditHandler}
                         editTaskHandler={this.editTaskHandler}
                         />
-
-                        
                     }
 
                     {

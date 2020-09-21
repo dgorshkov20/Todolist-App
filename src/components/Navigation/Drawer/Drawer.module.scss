@@ -1,0 +1,48 @@
+.Drawer {
+    width: 280px;
+    min-height: 100%;
+    padding-right: 20px;
+
+    background: #fff;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+
+    transition: .3s;
+    z-index: 100;
+}
+
+.Drawer ul {
+    margin-top: 30px;
+}
+
+.Drawer ul li {
+    margin: 10px 0;
+}
+
+.Drawer ul li a {
+
+    text-decoration: none;
+    color: #252525;
+
+    transition: .3s;
+
+    &:hover {
+        opacity: .5;
+    }
+}
+
+.DrawerOpen {
+    transform: translateX(0);
+}
+
+.links {
+    font-size: 30px;
+    list-style: none;
+}
+
+.active {
+    opacity: .5;
+}
