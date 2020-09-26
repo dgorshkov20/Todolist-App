@@ -7,6 +7,7 @@ class About extends React.Component {
         return (
             <div className={classes.About}>
                 <h1>Информация</h1>
+                <p>Чтобы отредактировать запись дважды кликните на нее</p>
                 <p>Версия приложения 1.0.0</p>
             </div>
         )

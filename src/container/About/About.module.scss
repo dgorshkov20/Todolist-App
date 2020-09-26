@@ -1,5 +1,7 @@
+
 .About {
     padding: 50px;
+    height: 100%;
 
     text-align: center;
     background-color: rgb(235, 235, 235);
@@ -7,5 +9,8 @@
 
 .About h1 {
     margin-top: 0;
-    
+}
+
+.About p {
+    font-size: 18px;
 }

@@ -5,13 +5,7 @@ import Backdrop from '../../UI/Backdrop/Backdrop'
 
 class Drawer extends React.Component {
 
-    renderLinks = () => {
-        const links = [
-            {to: '/', label: 'Список дел', exact: true},
-            {to: '/auth', label: 'Авторизация', exact: true},
-            {to: '/about', label: 'Информация', exact: true}
-        ]
-
+    renderLinks = (links) => {
         return links.map((link, index) => {
             return (
                 <li
@@ -32,6 +26,7 @@ class Drawer extends React.Component {
     }
 
 
+
     render() {
 
         const cls = [classes.Drawer]
@@ -40,11 +35,22 @@ class Drawer extends React.Component {
             cls.push(classes.DrawerOpen)
         }
 
+        const links = []
+
+        if (this.props.isAuthenticated) {
+            links.push({to: '/', label: 'Список дел', exact: true})
+            links.push({to: '/about', label: 'Информация', exact: true})
+            links.push({to: '/logout', label: 'Выход', exact: true})
+        } else {
+            links.push({to: '/auth', label: 'Авторизация', exact: true})
+            links.push({to: '/about', label: 'Информация', exact: true})
+        }
+
         return (
             <React.Fragment>
                 <nav className={cls.join(' ')}>
                     <ul>
-                        {this.renderLinks()}
+                        {this.renderLinks(links)}
                     </ul>
                 </nav>
                 {

@@ -1,274 +1,76 @@
 import React from 'react'
 import classes from './Todolist.module.scss'
-import axios from 'axios'
 import Input from '../../components/UI/Input/Input'
 import TaskLists from '../../components/TaskLists/TaskLists'
 import TodoStatus from '../../components/TodoStatus/TodoStatus'
 import Loader from '../../components/UI/Loader/Loader'
-
+import { connect } from 'react-redux'
+import {fetchTodo, 
+        TodoUpdate, 
+        addTask, 
+        deleteTask,
+        toggleCompleted,
+        changedFilter,
+        clearAllCompleted,
+        editTask,
+        editTaskValue,
+        editModeOff} from '../../store/actions/todolist'
 
 class Todolist extends React.Component {
-
-    state = {
-        todolists: [],
-        dataKey: [],
-        filter: 'all',
-        loader: true,
-        loaderSm: false
-    }
-
-    onAddHandler = async event => {
-        if (event.key === 'Enter') {
-            if (event.target.value !== '' && event.target.value.length < 35) {
-
-                this.setState({
-                    loaderSm: true
-                })
-
-                const tasks = this.state.todolists.concat() 
     
-                const task = {
-                    id: Math.random(),
-                    text: event.target.value,
-                    completed: false,
-                    edit: false
-                }
-    
-                tasks.push(task)
-                event.target.value = ''
-
-                try {
-                    await axios.post('https://todolist-app-fb466.firebaseio.com/task.json', task) 
-                } catch(e) {
-                    console.error(e)
-                }
-                
-                this.setState({
-                    todolists: tasks
-                })
-            }
-            
-        } 
+    onAddHandler = event => {
+        this.props.addTask(event)
     } 
 
-    onDeleteHandler = async task => {
-
-        this.setState({
-            loaderSm: true
-        })
-
-        try {
-            const index = this.state.todolists.indexOf(task)
-            await axios.delete(`https://todolist-app-fb466.firebaseio.com/task/${this.state.dataKey[index]}.json`) 
-
-            this.setState({
-                todolists: this.state.todolists.filter((i) => i !== task) 
-            })
-
-        } catch(e) {
-            console.error(e)
-        }
+    onDeleteHandler = task => {
+        this.props.deleteTask(task)
     }
 
-    onToggleComplete = async task => {
-
-        this.setState({
-            loaderSm: true
-        })
-
-        try {
-            const tasks = this.state.todolists.concat() 
-            task.completed = !task.completed
-            
-            const index = this.state.todolists.indexOf(task)
-            await axios.patch(`https://todolist-app-fb466.firebaseio.com/task/${this.state.dataKey[index]}.json`, task) 
-            this.setState({
-                todolists: tasks
-            })
-
-        } catch(e) {
-            console.error(e)
-        }
-        console.log(this.state.loaderSm)
-    }
-
-    clearCompletedHandler = () => {
-
-        this.setState({
-            loaderSm: true
-        })
-
-        const tasks = this.state.todolists.concat() 
-        let indexes = []
-
-        tasks.forEach((t, i) => {
-            if (t.completed === true) {
-                indexes.push(i)
-            }
-        })
-
-        indexes.forEach(async i => {
-            try {
-                await axios.delete(`https://todolist-app-fb466.firebaseio.com/task/${this.state.dataKey[i]}.json`) 
-
-                this.setState({
-                    todolists: tasks.filter(task => task.completed === false)
-                })
-
-            } catch(e) {
-                console.error(e)
-            }
-        })
-
+    onToggleComplete = task => {
+        this.props.toggleCompleted(task)
     }
 
     changedFilterHandler = e => {
-        this.setState({
-            filter: e.target.getAttribute('data-value')
-        })
+        this.props.changedFilter(e)
     }
 
-    editTaskHandler = async (task, value) => {
-
-        this.setState({
-            loaderSm: true
-        })
-
-        const index = this.state.todolists.indexOf(task)
-        if (value.length > 0) {
-            const tasks = this.state.todolists.concat() 
-            task.edit = !task.edit
-            
-            try {
-                const index = this.state.todolists.indexOf(task)
-                await axios.patch(`https://todolist-app-fb466.firebaseio.com/task/${this.state.dataKey[index]}.json`, task) 
-        
-                this.setState({
-                    todolists:  tasks
-                }) 
-            } catch(e) {
-                console.error(e)
-            }
-
-        } else {
-            try {
-                await axios.delete(`https://todolist-app-fb466.firebaseio.com/task/${this.state.dataKey[index]}.json`) 
-    
-                this.setState({
-                    todolists: this.state.todolists.filter((t) => t !== task) 
-                })
-
-            } catch(e) {
-                console.error(e)
-            }
-        }
+    clearCompletedHandler = () => {
+        this.props.clearAllCompleted()
     }
 
-    hideInputEditHandler = async (task, event) => {
+    editTaskHandler = (task, value) => {
+        this.props.editTask(task, value)
+    }
 
-        this.setState({
-            loaderSm: true
-        })
-
-        const index = this.state.todolists.indexOf(task)
-        if (event.key === 'Enter') {
-            if (event.target.value.length > 0) {
-                const tasks = this.state.todolists.concat() 
-                task.edit = !task.edit
-
-                try {
-                    const index = this.state.todolists.indexOf(task)
-                    await axios.patch(`https://todolist-app-fb466.firebaseio.com/task/${this.state.dataKey[index]}.json`, task) 
-            
-                    this.setState({
-                        todolists:  tasks
-                    }) 
-                } catch(e) {
-                    console.error(e)
-                }
-
-            } else {
-                try {
-                    await axios.delete(`https://todolist-app-fb466.firebaseio.com/task/${this.state.dataKey[index]}.json`) 
-
-                    this.setState({
-                        todolists: this.state.todolists.filter((t) => t !== task) 
-                    })
-
-                } catch(e) {
-                    console.error(e)
-                }
-
-            }
-        }
-        
+    hideInputEditHandler = (task, event) => {
+        this.props.editModeOff(task, event)
     }
 
     editValueHandler = (task, value) => {
-        const tasks = this.state.todolists.concat() 
-        task.text = value
-
-        this.setState({
-            todolists:  tasks
-        })
+        this.props.editTaskValue(task, value)
     }
 
-    async componentDidMount() {
-        try {
-            const response = await axios.get('https://todolist-app-fb466.firebaseio.com/task.json') 
-            
-            const getTodolist = Object.values(response.data)
-            
-            this.setState({
-                todolists: getTodolist,
-                dataKey: Object.keys(response.data),
-                loader: false
-            })
-        } catch(e) {
-            console.error(e)
-        }
-        
+    componentDidMount() {
+        this.props.fetchTodo()        
     } 
 
-    async componentDidUpdate(prevProps, prevState) {
-        
-        if (prevState.todolists !== this.state.todolists) {
-            this.setState({
-                loaderSm: false
-            })
-        }
-
-        if (prevState.todolists.length !== this.state.todolists.length) {
-            try {
-                const response = await axios.get('https://todolist-app-fb466.firebaseio.com/task.json') 
-                
-                const getTodolist = Object.values(response.data)
-                
-                this.setState({
-                    todolists: getTodolist,
-                    dataKey: Object.keys(response.data)
-                })
-            } catch(e) {
-                console.error(e)
-            }
-        }
-
-        
-        
+    componentDidUpdate(prevProps) {
+        this.props.TodoUpdate(prevProps)
     }
 
     render() {
 
+
         let filterTasks = [];
 
-        if (this.state.filter === 'all') filterTasks = this.state.todolists
-        if (this.state.filter === 'active') filterTasks = this.state.todolists.filter(t => t.completed === false)
-        if (this.state.filter === 'completed') filterTasks = this.state.todolists.filter(t => t.completed === true)
+        if (this.props.filter === 'all') filterTasks = this.props.todolists
+        if (this.props.filter === 'active') filterTasks = this.props.todolists.filter(t => t.completed === false)
+        if (this.props.filter === 'completed') filterTasks = this.props.todolists.filter(t => t.completed === true)
 
         return (
             <div className={classes.Todolist} >
                 {
-                    this.state.loaderSm 
+                    this.props.loaderSm 
                     ?   <div className={classes.LoaderSm}>
                             <Loader />
                         </div>
@@ -279,11 +81,11 @@ class Todolist extends React.Component {
                 <div className={classes.wrapper}>
                     <Input
                         onAddTask={this.onAddHandler}
-                        taskLength={this.state.todolists.length}
+                        taskLength={this.props.todolists.length}
                     />
 
                     {
-                        this.state.loader
+                        this.props.loader
                         ? <Loader /> 
                         : <TaskLists
                         lists={filterTasks}
@@ -296,10 +98,10 @@ class Todolist extends React.Component {
                     }
 
                     {
-                        this.state.todolists.length !== 0 && this.state.loader === false
+                        this.props.todolists.length !== 0 && this.props.loader === false
                         ? <TodoStatus
-                            tasks={this.state.todolists}
-                            filter={this.state.filter}
+                            tasks={this.props.todolists}
+                            filter={this.props.filter}
                             clearCompleted={this.clearCompletedHandler}
                             changedFilter={this.changedFilterHandler}
                         />
@@ -313,4 +115,29 @@ class Todolist extends React.Component {
     }
 }
 
-export default Todolist;
+function mapStateToProps(state) {
+    return {
+        todolists: state.todolist.todolists,
+        dataKey: state.todolist.dataKey,
+        filter: state.todolist.filter,
+        loader: state.todolist.loader,
+        loaderSm: state.todolist.loaderSm
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        fetchTodo: () => dispatch(fetchTodo()),
+        TodoUpdate: prevProps => dispatch(TodoUpdate(prevProps)),
+        addTask: event => dispatch(addTask(event)),
+        deleteTask: task => dispatch(deleteTask(task)),
+        toggleCompleted: task => dispatch(toggleCompleted(task)),
+        changedFilter: e => dispatch(changedFilter(e)),
+        clearAllCompleted: () => dispatch(clearAllCompleted()),
+        editTask: (task, value) => dispatch(editTask(task, value)),
+        editTaskValue: (task, value) => dispatch(editTaskValue(task, value)),
+        editModeOff: (task, event) => dispatch(editModeOff(task, event))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Todolist);

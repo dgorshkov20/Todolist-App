@@ -2,16 +2,16 @@ import React from 'react'
 import classes from './Auth.module.scss'
 import AuthInput from '../../components/UI/AuthInput/AuthInput'
 import is from 'is_js'
-import axios from 'axios'
+import {connect} from 'react-redux'
+import {auth,
+        register} from '../../store/actions/auth'
 
 class Auth extends React.Component {
 
     state = {
+        
         isFormValid: false,
-        authStatus: {
-            loginSuccess: false,
-            registerSuccess: false,
-        },
+        registerSuccess: false,
         formControls: {
             email: {
                 value: '',
@@ -42,74 +42,83 @@ class Auth extends React.Component {
         }
     }
 
-    loginHandler = async () => {
-        const authData = {
-            email: this.state.formControls.email.value,
-            password: this.state.formControls.password.value,
-            returnSecureToken: true
-        }
-
-        try {
-            const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDE-mYhMw722dLY7ex6_MmZJeA5D810El0', authData)
-
-            const authStatus = {...this.state.authStatus}
-
-            authStatus.loginSuccess = !this.state.authStatus.loginSuccess
-            setTimeout(() => {
-                authStatus.loginSuccess = !this.state.authStatus.loginSuccess
-                this.setState({
-                    authStatus
-                })
-            }, 3000)
-
-            this.setState({
-                authStatus
-            })
-
-            console.log(response.data)
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-    registerHandler = async () => {
-        const authData = {
-            email: this.state.formControls.email.value,
-            password: this.state.formControls.password.value,
-            returnSecureToken: true
-        }
-
-        // const DefaultTask = {
-
+    loginHandler = () => {
+        this.props.auth(
+            this.state.formControls.email.value,
+            this.state.formControls.password.value
+        )
+        // const authData = {
+        //     email: this.state.formControls.email.value,
+        //     password: this.state.formControls.password.value,
+        //     returnSecureToken: true
         // }
 
-        // // try {
-        // //     await axios.post('https://todolist-app-fb466.firebaseio.com/task.json', task) 
-        // // } catch(e) {
-        // //     console.error(e)
-        // // }
+        // try {
+        //     const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDE-mYhMw722dLY7ex6_MmZJeA5D810El0', authData)
 
-        try {
-            const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDE-mYhMw722dLY7ex6_MmZJeA5D810El0', authData)
+        //     // const authStatus = {...this.state.authStatus}
 
-            const authStatus = {...this.state.authStatus}
+        //     localStorage.setItem('userId', response.data.localId)
 
-            authStatus.registerSuccess = !this.state.authStatus.registerSuccess
-            setTimeout(() => {
-                authStatus.registerSuccess = !this.state.authStatus.registerSuccess
-                this.setState({
-                    authStatus
-                })
-            }, 3000)
+        //     // authStatus.loginSuccess = !this.state.authStatus.loginSuccess
+        //     // setTimeout(() => {
+        //     //     authStatus.loginSuccess = !this.state.authStatus.loginSuccess
+        //     //     this.setState({
+        //     //         authStatus
+        //     //     })
+        //     // }, 3000)
 
-            this.setState({
-                authStatus
-            })
+        //     // this.setState({
+        //     //     authStatus
+        //     // })
 
-            console.log(response.data)
-        } catch (err) {
-            console.log(err)
-        }
+        //     console.log(response.data.localId)
+        // } catch (err) {
+        //     console.log(err)
+        // }
+    }
+
+    registerHandler = () => {
+        this.props.register(
+            this.state.formControls.email.value,
+            this.state.formControls.password.value
+        )
+        // const authData = {
+        //     email: this.state.formControls.email.value,
+        //     password: this.state.formControls.password.value,
+        //     returnSecureToken: true
+        // }
+
+        // const DefaultTask = {
+        //     id: Math.random(),
+        //     text: "Приветсвую в Todolist-app",
+        //     completed: false,
+        //     edit: false
+        // }
+
+        // try {
+        //     const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDE-mYhMw722dLY7ex6_MmZJeA5D810El0', authData)
+
+        //     await axios.post(`https://todolist-app-fb466.firebaseio.com/user/${response.data.localId}/task.json`, DefaultTask) 
+
+        //     // const authStatus = {...this.state.authStatus}
+
+        //     // authStatus.registerSuccess = !this.state.authStatus.registerSuccess
+        //     // setTimeout(() => {
+        //     //     authStatus.registerSuccess = !this.state.authStatus.registerSuccess
+        //     //     this.setState({
+        //     //         authStatus
+        //     //     })
+        //     // }, 3000)
+
+        //     // this.setState({
+        //     //     authStatus
+        //     // })
+
+        //     console.log(response.data)
+        // } catch (err) {
+        //     console.log(err)
+        // }
     }
 
     submitHandler = event => {
@@ -216,18 +225,16 @@ class Auth extends React.Component {
                         </div>
 
                         {
-                            this.state.authStatus.registerSuccess
+                            this.props.registerSuccess
                             ? <span className={classes.success}>Вы успешно зарегистрировались</span>
                             : null
                         }
 
-                        {
+                        {/* {
                             this.state.authStatus.loginSuccess
                             ? <span className={classes.success}>Вы успешно авторизировались</span>
                             : null
-                        }
-                        
-                        
+                        } */}
 
                     </form>
                 </div>
@@ -238,4 +245,17 @@ class Auth extends React.Component {
     }
 }
 
-export default Auth
+function mapDispatchToProps(dispatch) {
+    return {
+        auth: (email, password) => dispatch(auth(email, password)),
+        register: (email, password) => dispatch(register(email, password))
+    }
+}
+
+function mapStateToProps(state) {
+    return {
+        registerSuccess: state.auth.registerSuccess
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth)
